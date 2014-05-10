@@ -71,7 +71,7 @@ public class ChanThreadNotifier {
         System.out.print("Enter a keyword to monitor for: ");
         keyword = in.next();
         while (selectstate) {
-            System.out.println("Enter delay interval (in minutes, e.g. 1 for 1 minutes) for board update fetching (cannot be lower than 1 minutes: ");
+            System.out.println("Enter delay interval (in minutes, e.g. 1 for 1 minute) for board update fetching (cannot be lower than 1 minute): ");
             {
                 try {
                     time = in.nextInt();

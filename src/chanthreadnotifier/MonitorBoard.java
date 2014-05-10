@@ -33,7 +33,6 @@ public class MonitorBoard extends Thread {
     public void run() {
         running = true;
         shouldFetch = true;
-        delay *= 60000;
         while (running) {
             while (shouldFetch) {
 
@@ -90,9 +89,9 @@ public class MonitorBoard extends Thread {
                 }
                 shouldFetch = false;
                 oldTime = System.currentTimeMillis();
-                newTime = oldTime + delay;
+                newTime = oldTime + (delay * 60000);
 
-                System.out.println("Sleeping for " + (delay /= 60000) + " minutes.");
+                System.out.println("Sleeping for " + (delay) + " minutes.");
 
             }
             try {
