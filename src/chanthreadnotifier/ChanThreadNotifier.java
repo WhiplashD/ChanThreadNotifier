@@ -6,6 +6,7 @@
 package chanthreadnotifier;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
@@ -21,6 +22,8 @@ public class ChanThreadNotifier {
     static String keyword, board;
     static int time, newliner;
     static MonitorBoard monitor;
+    static Date date;
+    static SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss");
     static Scanner in;
     static String[] boards = new String[]{"a", "b", "c", "d", "e", "f", "g", "gif",
         "h", "hr", "k", "m", "o", "p", "r", "s", "t", "u", "v", "vg", "vr", "w", "wg",
@@ -32,16 +35,15 @@ public class ChanThreadNotifier {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        Date date = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("h:mm:ss");
-        String timestamp = "[" + sdf.format(date) + "]";
         Initialize();
-        System.out.println(timestamp + " Press q at any time to quit, r to reset.");
+        date = new Date();
+        System.out.println("[" + sdf.format(date) + "] " + "Press q at any time to quit, r to reset.");
         monitor.start();
         while (monitor.isAlive()) {
             switch (in.next()) {
                 case "q":
-                    System.out.println("Exiting.");
+                    date = new Date();
+                    System.out.println("[" + sdf.format(date) + "] " + "Exiting.");
                     System.exit(1);
                     break;
                 case "r":
@@ -56,16 +58,15 @@ public class ChanThreadNotifier {
 
     public static void Initialize() {
         in = new Scanner(System.in);
-        Date date = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("h:mm:ss");
-        String timestamp = "[" + sdf.format(date) + "]";
+        date = new Date();
         while (selectstate) {
-            System.out.println(timestamp + "Enter a board to monitor on (example g for /g/): ");
+            System.out.println("[" + sdf.format(date) + "] " + "Enter a board to monitor on (example g for /g/): ");
             board = in.next();
             if (Arrays.asList(boards).contains(board)) {
                 break;
             }
-            System.out.println("Valid boards: ");
+            date = new Date();
+            System.out.println("[" + sdf.format(date) + "] " + "Valid boards: ");
             for (String s : boards) {
                 System.out.print(s + " ");
                 newliner++;
@@ -76,10 +77,12 @@ public class ChanThreadNotifier {
             }
             System.out.println();
         }
-        System.out.print(timestamp + "Enter a keyword to monitor for: ");
+        date = new Date();
+        System.out.print("[" + sdf.format(date) + "] " + "Enter a keyword to monitor for: ");
         keyword = in.next();
         while (selectstate) {
-            System.out.println(timestamp + "Enter delay interval (in minutes, e.g. 1 for 1 minute) for board update fetching (cannot be lower than 1 minute): ");
+            date = new Date();
+            System.out.println("[" + sdf.format(date) + "] " + "Enter delay interval (in minutes, e.g. 1 for 1 minute) for board update fetching (cannot be lower than 1 minute): ");
             {
                 try {
                     time = in.nextInt();
@@ -91,7 +94,8 @@ public class ChanThreadNotifier {
                 }
             }
         }
-        System.out.println(timestamp + "Will monitor for " + keyword + " on board /" + board + "/" + " every " + time + " minutes.");
+        date = new Date();
+        System.out.println("[" + sdf.format(date) + "] " + "Will monitor for " + keyword + " on board /" + board + "/" + " every " + time + " minutes.");
         monitor = new MonitorBoard(keyword, board, time);
     }
 

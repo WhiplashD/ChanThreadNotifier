@@ -11,6 +11,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -24,6 +25,8 @@ public class MonitorBoard extends Thread {
     long oldTime, currentTime, newTime, delay;
     boolean running, shouldFetch;
     Gson gson = new Gson();
+    static Date date;
+    static SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss");
 
     public MonitorBoard(String keyword, String board, int time) {
         this.keyword = keyword;
@@ -35,22 +38,23 @@ public class MonitorBoard extends Thread {
     public void run() {
         running = true;
         shouldFetch = true;
-        Date date = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("h:mm:ss");
-        String timestamp = "[" + sdf.format(date) + "]";
         while (running) {
             while (shouldFetch) {
 
-                System.out.println(timestamp + "Fetching.");
+                date = new Date();
+                System.out.println("[" + sdf.format(date) + "] " + "Fetching.");
 
                 try {
 
-                    System.out.println(timestamp + "Creating URL...");
+                    date = new Date();
+                    System.out.println("[" + sdf.format(date) + "] " + "Creating URL...");
 
                     url = "http://a.4cdn.org/" + board + "/catalog.json";
 
                     URL chanurl = new URL(url);
-                    System.out.println(timestamp + "URL created. " + url);
+
+                    date = new Date();
+                    System.out.println("[" + sdf.format(date) + "] " + "URL created. " + url);
 
                     BufferedReader reader = new BufferedReader(new InputStreamReader(chanurl.openStream()));
                     StringBuilder buffer = new StringBuilder();
@@ -58,27 +62,33 @@ public class MonitorBoard extends Thread {
 
                     char[] chars = new char[1024];
 
-                    System.out.println(timestamp + "Building string buffer...");
+                    date = new Date();
+                    System.out.println("[" + sdf.format(date) + "] " + "Building string buffer...");
 
                     while ((read = reader.read(chars)) != -1) {
                         buffer.append(chars, 0, read);
                     }
                     String chanjson = buffer.toString();
 
-                    System.out.println(timestamp + "String buffer created. " + buffer.length());
-                    System.out.println(timestamp + "Creating gson object...");
+                    date = new Date();
+                    System.out.println("[" + sdf.format(date) + "] " + "String buffer created. " + buffer.length());
+                    date = new Date();
+                    System.out.println("[" + sdf.format(date) + "] " + "Creating gson object...");
 
                     Page[] page = gson.fromJson(chanjson, Page[].class);
 
-                    System.out.println(timestamp + "Gson object created.");
-                    System.out.println(timestamp + "Searching board threads for keyword matches...");
+                    date = new Date();
+                    System.out.println("[" + sdf.format(date) + "] " + "Gson object created.");
+                    date = new Date();
+                    System.out.println("[" + sdf.format(date) + "] " + "Searching board threads for keyword matches...");
 
                     for (Page p : page) {
                         for (Post post : p.threads) {
                             try {
                                 if (post.com.toLowerCase().contains(keyword) | post.sub.toLowerCase().contains(keyword)) {
 
-                                    System.out.println(timestamp + "Match found at " + "boards.4chan.org/" + board + "/thread/" + post.no);
+                                    date = new Date();
+                                    System.out.println("[" + sdf.format(date) + "] " + "Match found at " + "boards.4chan.org/" + board + "/thread/" + post.no);
 
                                 }
                             } catch (NullPointerException npe) {
@@ -87,7 +97,8 @@ public class MonitorBoard extends Thread {
                         }
                     }
 
-                    System.out.println(timestamp + "Search finished.");
+                    date = new Date();
+                    System.out.println("[" + sdf.format(date) + "] " + "Search finished.");
 
                 } catch (IOException | JsonSyntaxException ex) {
 
@@ -96,7 +107,8 @@ public class MonitorBoard extends Thread {
                 oldTime = System.currentTimeMillis();
                 newTime = oldTime + (delay * 60000);
 
-                System.out.println(timestamp + "Sleeping for " + (delay) + " minutes.");
+                date = new Date();
+                System.out.println("[" + sdf.format(date) + "] " + "Sleeping for " + (delay) + " minutes.");
 
             }
             try {
@@ -107,7 +119,8 @@ public class MonitorBoard extends Thread {
             currentTime = System.currentTimeMillis();
             if (currentTime >= newTime) {
 
-                System.out.println(timestamp + "Waking.");
+                date = new Date();
+                System.out.println("[" + sdf.format(date) + "] " + "Waking.");
 
                 shouldFetch = true;
             }
