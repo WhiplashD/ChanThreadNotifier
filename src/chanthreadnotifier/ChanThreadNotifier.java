@@ -1,12 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package chanthreadnotifier;
 
 import java.io.IOException;
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
@@ -19,12 +14,13 @@ import java.util.Scanner;
 public class ChanThreadNotifier {
 
     static boolean selectstate = true;
-    static String keyword, board;
-    static int time, newliner;
+    static String keyword, board; // Word to search threads for, board to search on.
+    static int time, newliner; // Delay interval, count to create a newline when listing valid boards.
     static MonitorBoard monitor;
     static Date date;
     static SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss");
     static Scanner in;
+    // String array of all the boards on 4chan.
     static String[] boards = new String[]{"a", "b", "c", "d", "e", "f", "g", "gif",
         "h", "hr", "k", "m", "o", "p", "r", "s", "t", "u", "v", "vg", "vr", "w", "wg",
         "i", "ic", "r9k", "s4s", "cm", "hm", "lgbt", "y", "3", "adv", "an", "asp", "biz",
@@ -35,7 +31,7 @@ public class ChanThreadNotifier {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        Initialize();
+        Initialize(); // Run through selection process and start monitoring.
         date = new Date();
         System.out.println("[" + sdf.format(date) + "] " + "Press q at any time to quit, r to reset.");
         monitor.start();
@@ -63,11 +59,12 @@ public class ChanThreadNotifier {
             System.out.println("[" + sdf.format(date) + "] " + "Enter a board to monitor on (example g for /g/): ");
             board = in.next();
             if (Arrays.asList(boards).contains(board)) {
-                break;
+                break; // If we got a match we continue on.
             }
             date = new Date();
+            // Otherwise we tell remind them what boards are valid and what to enter.
             System.out.println("[" + sdf.format(date) + "] " + "Valid boards: ");
-            for (String s : boards) {
+            for (String s : boards) { // This prints every 5 boards on a new line.
                 System.out.print(s + " ");
                 newliner++;
                 if (newliner > 5) {
