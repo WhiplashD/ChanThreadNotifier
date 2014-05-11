@@ -6,7 +6,9 @@
 package chanthreadnotifier;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Scanner;
 
 /**
@@ -30,8 +32,11 @@ public class ChanThreadNotifier {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("h:mm:ss");
+        String timestamp = "[" + sdf.format(date) + "]";
         Initialize();
-        System.out.println("Press q at any time to quit, r to reset.");
+        System.out.println(timestamp + " Press q at any time to quit, r to reset.");
         monitor.start();
         while (monitor.isAlive()) {
             switch (in.next()) {
@@ -51,8 +56,11 @@ public class ChanThreadNotifier {
 
     public static void Initialize() {
         in = new Scanner(System.in);
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("h:mm:ss");
+        String timestamp = "[" + sdf.format(date) + "]";
         while (selectstate) {
-            System.out.println("Enter a board to monitor on (example g for /g/): ");
+            System.out.println(timestamp + "Enter a board to monitor on (example g for /g/): ");
             board = in.next();
             if (Arrays.asList(boards).contains(board)) {
                 break;
@@ -68,10 +76,10 @@ public class ChanThreadNotifier {
             }
             System.out.println();
         }
-        System.out.print("Enter a keyword to monitor for: ");
+        System.out.print(timestamp + "Enter a keyword to monitor for: ");
         keyword = in.next();
         while (selectstate) {
-            System.out.println("Enter delay interval (in minutes, e.g. 1 for 1 minute) for board update fetching (cannot be lower than 1 minute): ");
+            System.out.println(timestamp + "Enter delay interval (in minutes, e.g. 1 for 1 minute) for board update fetching (cannot be lower than 1 minute): ");
             {
                 try {
                     time = in.nextInt();
@@ -83,7 +91,7 @@ public class ChanThreadNotifier {
                 }
             }
         }
-        System.out.println("Will monitor for " + keyword + " on board /" + board + "/" + " every " + time + " minutes.");
+        System.out.println(timestamp + "Will monitor for " + keyword + " on board /" + board + "/" + " every " + time + " minutes.");
         monitor = new MonitorBoard(keyword, board, time);
     }
 
