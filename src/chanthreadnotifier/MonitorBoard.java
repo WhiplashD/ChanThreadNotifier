@@ -1,9 +1,7 @@
 package chanthreadnotifier;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -108,6 +106,8 @@ public class MonitorBoard extends Thread {
                     }
                     System.gc();
                 } catch (Exception e) {
+                    date = new Date();
+                    System.out.println("[" + sdf.format(date) + "] " + "Fetching failed.");
                     e.getMessage();
                 }
                 shouldFetch = false;
